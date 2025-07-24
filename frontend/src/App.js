@@ -1667,41 +1667,50 @@ const AppContent = ({ authView, setAuthView, showLanding, setShowLanding }) => {
   };
 
   return (
-    <div className="App min-h-screen bg-gray-100">
+    <div className="App min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       {/* Navigation */}
-      <nav className="bg-white shadow-md">
+      <nav className="bg-white/90 backdrop-blur-md shadow-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">Mini Quiz Platform</h1>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Mini Quiz Platform
+              </h1>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-600">Welcome, {user?.full_name}</span>
-              <span className={`px-2 py-1 rounded text-xs font-medium ${
-                isAdmin ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'
+            <div className="flex items-center space-x-6">
+              <div className="text-center">
+                <p className="text-sm text-gray-500">Welcome back,</p>
+                <p className="font-semibold text-gray-900">{user?.full_name}</p>
+              </div>
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                isAdmin ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
               }`}>
-                {isAdmin ? 'Admin' : 'Student'}
+                {isAdmin ? '👨‍🏫 Admin' : '👨‍🎓 Student'}
               </span>
               
-              <div className="flex space-x-2">
+              <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
                 <button
                   onClick={() => setCurrentView('home')}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                    currentView === 'home' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:text-blue-600'
+                  className={`px-4 py-2 rounded-md font-medium transition-all text-sm ${
+                    currentView === 'home' 
+                      ? 'bg-white text-blue-600 shadow-sm' 
+                      : 'text-gray-600 hover:text-blue-600 hover:bg-white/50'
                   }`}
                 >
-                  Dashboard
+                  🏠 Dashboard
                 </button>
                 
                 {!isAdmin && (
                   <button
                     onClick={() => setCurrentView('my-results')}
-                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                      currentView === 'my-results' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:text-blue-600'
+                    className={`px-4 py-2 rounded-md font-medium transition-all text-sm ${
+                      currentView === 'my-results' 
+                        ? 'bg-white text-blue-600 shadow-sm' 
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-white/50'
                     }`}
                   >
-                    My Results
+                    📊 My Results
                   </button>
                 )}
                 
@@ -1709,31 +1718,35 @@ const AppContent = ({ authView, setAuthView, showLanding, setShowLanding }) => {
                   <>
                     <button
                       onClick={() => setCurrentView('create')}
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        currentView === 'create' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:text-blue-600'
+                      className={`px-4 py-2 rounded-md font-medium transition-all text-sm ${
+                        currentView === 'create' 
+                          ? 'bg-white text-blue-600 shadow-sm' 
+                          : 'text-gray-600 hover:text-blue-600 hover:bg-white/50'
                       }`}
                     >
-                      Create Quiz
+                      ➕ Create Quiz
                     </button>
                     
                     <button
                       onClick={() => setCurrentView('evaluate')}
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        currentView === 'evaluate' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:text-blue-600'
+                      className={`px-4 py-2 rounded-md font-medium transition-all text-sm ${
+                        currentView === 'evaluate' 
+                          ? 'bg-white text-blue-600 shadow-sm' 
+                          : 'text-gray-600 hover:text-blue-600 hover:bg-white/50'
                       }`}
                     >
-                      Evaluate
+                      📝 Evaluate
                     </button>
                   </>
                 )}
-                
-                <button
-                  onClick={logout}
-                  className="text-red-600 hover:text-red-700 font-medium px-4 py-2"
-                >
-                  Logout
-                </button>
               </div>
+                
+              <button
+                onClick={logout}
+                className="text-red-600 hover:text-red-700 font-medium px-4 py-2 rounded-lg hover:bg-red-50 transition-all"
+              >
+                🚪 Logout
+              </button>
             </div>
           </div>
         </div>

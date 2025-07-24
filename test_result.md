@@ -177,8 +177,7 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Implemented complete auth UI with login/register forms, React Context for state management, role-based navigation"
-        
-  - task: "Enhanced quiz creation with text questions"
+  - task: "Authentication UI with login/register"
     implemented: true
     working: "NA" 
     file: "App.js"

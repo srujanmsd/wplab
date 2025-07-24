@@ -254,7 +254,188 @@ class QuizPlatformTester:
             self.log_test("Role-based Access Control", "FAIL", f"Exception: {str(e)}")
             return False
 
-    def test_create_quiz(self) -> bool:
+    def test_create_quiz_with_mixed_questions(self) -> bool:
+        """Test POST /api/quizzes - Create quiz with both MCQ and text questions"""
+        try:
+            if not self.admin_token:
+                self.log_test("Create Quiz with Mixed Questions", "FAIL", "No admin token available")
+                return False
+            
+            # Create a comprehensive quiz with mixed question types
+            quiz_data = {
+                "title": "Advanced Python Programming Assessment",
+                "subject": "Computer Science",
+                "description": "Comprehensive assessment covering Python concepts with both multiple choice and text-based questions",
+                "time_limit": 45,
+                "questions": [
+                    {
+                        "question_text": "What is the correct way to create a list in Python?",
+                        "question_type": "multiple_choice",
+                        "options": ["list = []", "list = {}", "list = ()", "list = <>"],
+                        "correct_answer": "list = []",
+                        "explanation": "Square brackets [] are used to create lists in Python",
+                        "points": 2
+                    },
+                    {
+                        "question_text": "Which keyword is used to define a function in Python?",
+                        "question_type": "multiple_choice", 
+                        "options": ["function", "def", "func", "define"],
+                        "correct_answer": "def",
+                        "explanation": "The 'def' keyword is used to define functions in Python",
+                        "points": 2
+                    },
+                    {
+                        "question_text": "Explain the difference between a list and a tuple in Python. Provide examples and discuss when you would use each.",
+                        "question_type": "text",
+                        "points": 5
+                    },
+                    {
+                        "question_text": "Write a Python function that takes a list of numbers and returns the sum of all even numbers. Explain your approach.",
+                        "question_type": "text",
+                        "points": 6
+                    }
+                ]
+            }
+            
+            headers = {"Authorization": f"Bearer {self.admin_token}", "Content-Type": "application/json"}
+            response = self.session.post(f"{self.base_url}/quizzes", json=quiz_data, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                required_fields = ["id", "title", "subject", "questions", "total_questions", "total_points", "requires_evaluation"]
+                
+                if all(field in data for field in required_fields):
+                    self.created_quiz_id = data["id"]
+                    if (data["total_questions"] == 4 and 
+                        data["total_points"] == 15 and 
+                        data["requires_evaluation"] == True):
+                        self.log_test("Create Quiz with Mixed Questions", "PASS", 
+                                    f"Quiz created with mixed questions, total points: {data['total_points']}")
+                        return True
+                    else:
+                        self.log_test("Create Quiz with Mixed Questions", "FAIL", 
+                                    f"Quiz metadata incorrect: questions={data['total_questions']}, points={data['total_points']}, eval={data['requires_evaluation']}")
+                        return False
+                else:
+                    self.log_test("Create Quiz with Mixed Questions", "FAIL", "Response missing required fields")
+                    return False
+            else:
+                self.log_test("Create Quiz with Mixed Questions", "FAIL", f"Status code: {response.status_code}, Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Create Quiz with Mixed Questions", "FAIL", f"Exception: {str(e)}")
+            return False
+
+    def test_list_quizzes_authenticated(self) -> bool:
+        """Test GET /api/quizzes - List all quizzes (authenticated)"""
+        try:
+            if not self.user_token:
+                self.log_test("List Quizzes (Authenticated)", "FAIL", "No user token available")
+                return False
+            
+            headers = {"Authorization": f"Bearer {self.user_token}"}
+            response = self.session.get(f"{self.base_url}/quizzes", headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if isinstance(data, list):
+                    if len(data) > 0:
+                        # Check if our created quiz is in the list
+                        quiz_found = False
+                        for quiz in data:
+                            if quiz.get("id") == self.created_quiz_id:
+                                quiz_found = True
+                                # Verify that questions are not included in listing
+                                if ("questions" not in quiz and 
+                                    "requires_evaluation" in quiz and
+                                    quiz["requires_evaluation"] == True):
+                                    self.log_test("List Quizzes (Authenticated)", "PASS", 
+                                                f"Found {len(data)} quizzes, metadata properly included")
+                                    return True
+                                else:
+                                    self.log_test("List Quizzes (Authenticated)", "FAIL", 
+                                                "Quiz listing format incorrect")
+                                    return False
+                        
+                        if not quiz_found:
+                            self.log_test("List Quizzes (Authenticated)", "FAIL", "Created quiz not found in listing")
+                            return False
+                    else:
+                        self.log_test("List Quizzes (Authenticated)", "PASS", "Empty quiz list returned")
+                        return True
+                else:
+                    self.log_test("List Quizzes (Authenticated)", "FAIL", "Response is not a list")
+                    return False
+            else:
+                self.log_test("List Quizzes (Authenticated)", "FAIL", f"Status code: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("List Quizzes (Authenticated)", "FAIL", f"Exception: {str(e)}")
+            return False
+
+    def test_get_quiz_for_taking_mixed(self) -> bool:
+        """Test GET /api/quizzes/{quiz_id} - Get quiz with mixed question types"""
+        try:
+            if not self.created_quiz_id or not self.user_token:
+                self.log_test("Get Quiz for Taking (Mixed)", "FAIL", "Missing quiz ID or token")
+                return False
+                
+            headers = {"Authorization": f"Bearer {self.user_token}"}
+            response = self.session.get(f"{self.base_url}/quizzes/{self.created_quiz_id}", headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                required_fields = ["id", "title", "subject", "questions"]
+                if all(field in data for field in required_fields):
+                    questions = data["questions"]
+                    
+                    # Verify mixed question types and proper data structure
+                    mcq_count = 0
+                    text_count = 0
+                    answers_hidden = True
+                    
+                    for question in questions:
+                        if question["question_type"] == "multiple_choice":
+                            mcq_count += 1
+                            # MCQ should have options but no correct_answer
+                            if "options" not in question or "correct_answer" in question:
+                                answers_hidden = False
+                                break
+                        elif question["question_type"] == "text":
+                            text_count += 1
+                            # Text questions should not have options or correct_answer
+                            if "options" in question or "correct_answer" in question:
+                                self.log_test("Get Quiz for Taking (Mixed)", "FAIL", "Text question has invalid fields")
+                                return False
+                        
+                        # All questions should have required fields
+                        required_q_fields = ["id", "question_text", "question_type", "points"]
+                        if not all(field in question for field in required_q_fields):
+                            self.log_test("Get Quiz for Taking (Mixed)", "FAIL", "Question missing required fields")
+                            return False
+                    
+                    if mcq_count == 2 and text_count == 2 and answers_hidden:
+                        self.log_test("Get Quiz for Taking (Mixed)", "PASS", 
+                                    f"Mixed quiz retrieved correctly: {mcq_count} MCQ, {text_count} text questions")
+                        return True
+                    else:
+                        self.log_test("Get Quiz for Taking (Mixed)", "FAIL", 
+                                    f"Question types or security incorrect: MCQ={mcq_count}, Text={text_count}, Hidden={answers_hidden}")
+                        return False
+                else:
+                    self.log_test("Get Quiz for Taking (Mixed)", "FAIL", "Response missing required fields")
+                    return False
+            else:
+                self.log_test("Get Quiz for Taking (Mixed)", "FAIL", f"Status code: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Get Quiz for Taking (Mixed)", "FAIL", f"Exception: {str(e)}")
+            return False
         """Test POST /api/quizzes - Create new quiz"""
         try:
             # Create a comprehensive quiz with realistic data

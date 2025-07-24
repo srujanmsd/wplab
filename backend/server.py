@@ -181,7 +181,6 @@ async def get_admin_user(current_user: User = Depends(get_current_user)):
         )
     return current_user
 
-# Authentication Endpoints
 @api_router.post("/register", response_model=User)
 async def register_user(user_data: UserCreate):
     try:
@@ -198,11 +197,17 @@ async def register_user(user_data: UserCreate):
         user_dict = user_data.dict()
         user_dict.pop("password")
         user_dict["hashed_password"] = hashed_password
+        user_dict["id"] = str(uuid.uuid4())
+        user_dict["is_active"] = True
+        user_dict["created_at"] = datetime.utcnow()
         
-        new_user = User(**user_dict)
-        await db.users.insert_one(new_user.dict())
+        # Insert to database
+        await db.users.insert_one(user_dict)
         
-        return new_user
+        # Return user without password
+        response_dict = user_dict.copy()
+        response_dict.pop("hashed_password")
+        return User(**response_dict)
     except HTTPException:
         raise
     except Exception as e:

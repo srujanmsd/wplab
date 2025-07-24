@@ -99,6 +99,304 @@ const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+// Landing Page Component
+const LandingPage = ({ setShowLanding, setAuthView }) => {
+  const handleGetStarted = () => {
+    setShowLanding(false);
+    setAuthView('register');
+  };
+
+  const handleLogin = () => {
+    setShowLanding(false);
+    setAuthView('login');
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+      {/* Navigation */}
+      <nav className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                  Mini Quiz Platform
+                </h1>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={handleLogin}
+                className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Login
+              </button>
+              <button
+                onClick={handleGetStarted}
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105"
+              >
+                Get Started
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative py-20 lg:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                Create & Take
+                <span className="block bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                  Smart Quizzes
+                </span>
+              </h1>
+              <p className="mt-6 text-xl text-gray-600 leading-relaxed">
+                A comprehensive platform for creating interactive quizzes with multiple choice and text questions, 
+                complete with admin evaluation and detailed feedback systems.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <button
+                  onClick={handleGetStarted}
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg"
+                >
+                  Start Creating Quizzes
+                </button>
+                <button
+                  onClick={handleLogin}
+                  className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg text-lg font-medium hover:border-blue-600 hover:text-blue-600 transition-all"
+                >
+                  Sign In
+                </button>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="relative z-10">
+                <img
+                  src="https://images.unsplash.com/photo-1551533256-ab4695bca419?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwzfHxvbmxpbmUlMjBxdWl6fGVufDB8fHxibHVlfDE3NTMzNDc4NzV8MA&ixlib=rb-4.1.0&q=85"
+                  alt="Online Learning"
+                  className="rounded-2xl shadow-2xl"
+                />
+              </div>
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full opacity-20 animate-pulse"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-full opacity-20 animate-pulse animation-delay-1000"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Powerful Features for Modern Learning
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Everything you need to create, manage, and evaluate quizzes with advanced features
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-2xl hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Mixed Question Types</h3>
+              <p className="text-gray-600">
+                Create quizzes with both multiple choice and text-based questions for comprehensive assessment.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Smart Evaluation</h3>
+              <p className="text-gray-600">
+                Automatic scoring for multiple choice with manual evaluation and feedback for text answers.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-8 rounded-2xl hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Role-Based Access</h3>
+              <p className="text-gray-600">
+                Secure authentication with admin and student roles for complete quiz management control.
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="bg-gradient-to-br from-orange-50 to-red-50 p-8 rounded-2xl hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-gradient-to-r from-orange-600 to-red-600 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Detailed Analytics</h3>
+              <p className="text-gray-600">
+                Comprehensive results with scores, feedback, and detailed performance insights.
+              </p>
+            </div>
+
+            {/* Feature 5 */}
+            <div className="bg-gradient-to-br from-teal-50 to-cyan-50 p-8 rounded-2xl hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Real-time Updates</h3>
+              <p className="text-gray-600">
+                Instant quiz submissions and real-time evaluation status updates for seamless workflow.
+              </p>
+            </div>
+
+            {/* Feature 6 */}
+            <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-2xl hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-lg flex items-center justify-center mb-6">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3">Fast & Reliable</h3>
+              <p className="text-gray-600">
+                Modern architecture ensuring quick load times and reliable performance for all users.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              How It Works
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Simple steps to get started with creating and managing quizzes
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Step 1 */}
+            <div className="text-center">
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1544731612-de7f96afe55f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHw0fHxvbmxpbmUlMjBxdWl6fGVufDB8fHxibHVlfDE3NTMzNDc4NzV8MA&ixlib=rb-4.1.0&q=85"
+                  alt="Create Quiz"
+                  className="w-full h-64 object-cover rounded-2xl shadow-lg"
+                />
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  1
+                </div>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">Create Your Quiz</h3>
+              <p className="text-gray-600">
+                Design engaging quizzes with multiple choice and text questions, set point values, and add explanations.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="text-center">
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1541178735493-479c1a27ed24?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwyfHxkaWdpdGFsJTIwbGVhcm5pbmd8ZW58MHx8fGJsdWV8MTc1MzM0Nzg4Mnww&ixlib=rb-4.1.0&q=85"
+                  alt="Take Quiz"
+                  className="w-full h-64 object-cover rounded-2xl shadow-lg"
+                />
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  2
+                </div>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">Students Take Quizzes</h3>
+              <p className="text-gray-600">
+                Students can access and complete quizzes with an intuitive interface supporting all question types.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="text-center">
+              <div className="relative">
+                <img
+                  src="https://images.unsplash.com/photo-1651796704084-a115817945b2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwzfHxkaWdpdGFsJTIwbGVhcm5pbmd8ZW58MHx8fGJsdWV8MTc1MzM0Nzg4Mnww&ixlib=rb-4.1.0&q=85"
+                  alt="Evaluate Results"
+                  className="w-full h-64 object-cover rounded-2xl shadow-lg"
+                />
+                <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  3
+                </div>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">Review & Grade</h3>
+              <p className="text-gray-600">
+                Admins can review text answers, provide feedback, assign grades, and publish comprehensive results.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-700">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to Transform Your Quizzes?
+          </h2>
+          <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+            Join educators and students who are already using our platform to create better learning experiences.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={handleGetStarted}
+              className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-medium hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg"
+            >
+              Get Started Free
+            </button>
+            <button
+              onClick={handleLogin}
+              className="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-white hover:text-blue-600 transition-all"
+            >
+              Sign In Now
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent mb-4">
+              Mini Quiz Platform
+            </h3>
+            <p className="text-gray-400 mb-6">
+              Empowering education through intelligent quiz management
+            </p>
+            <div className="flex justify-center space-x-6">
+              <span className="text-gray-400">© 2024 Mini Quiz Platform. All rights reserved.</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
 // Login Component
 const Login = ({ onSwitchToRegister }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });

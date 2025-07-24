@@ -224,7 +224,7 @@ async def submit_quiz_attempt(quiz_id: str, attempt: QuizAttemptSubmission, stud
 async def get_quiz_result(result_id: str):
     """Get quiz result by ID"""
     try:
-        result = await db.quiz_results.find_one({"id": result_id})
+        result = await db.quiz_results.find_one({"id": result_id}, {"_id": 0})
         
         if not result:
             raise HTTPException(status_code=404, detail="Result not found")

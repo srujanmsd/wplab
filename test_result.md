@@ -238,3 +238,5 @@ agent_communication:
     message: "Successfully implemented comprehensive enhancements: JWT authentication with user/admin roles, text-based questions requiring manual evaluation, admin grading interface with feedback system, result publishing controls, and enhanced student dashboard. The platform now supports full quiz lifecycle from creation to evaluation to result publishing. Backend needs testing for all new authentication and evaluation endpoints."
   - agent: "main"
     message: "Fixed critical frontend compilation error caused by using 'eval' as variable name (reserved word in JavaScript strict mode). Changed to 'evaluation' to resolve the parsing error. Frontend now compiles successfully. Ready to test backend functionality and then provide preview to user."
+  - agent: "main"
+    message: "RESOLVED authentication bug: Fixed 'hashed_password' error in login by correcting User model inconsistency. Registration now properly stores hashed passwords in database, login authentication works correctly. Cleared corrupted user data. Authentication system fully functional for both users and admins."

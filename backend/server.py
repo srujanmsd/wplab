@@ -240,7 +240,7 @@ async def get_quiz_result(result_id: str):
 async def get_all_results():
     """Get all quiz results for admin"""
     try:
-        results = await db.quiz_results.find().sort("completed_at", -1).to_list(1000)
+        results = await db.quiz_results.find({}, {"_id": 0}).sort("completed_at", -1).to_list(1000)
         return results
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching results: {str(e)}")

@@ -113,7 +113,7 @@ async def get_all_quizzes():
         quizzes = await db.quizzes.find(
             {"is_active": True},
             {
-                "id": 1, "title": 1, "subject": 1, "description": 1,
+                "_id": 0, "id": 1, "title": 1, "subject": 1, "description": 1,
                 "total_questions": 1, "time_limit": 1, "created_at": 1
             }
         ).to_list(1000)

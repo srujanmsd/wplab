@@ -126,7 +126,7 @@ async def get_all_quizzes():
 async def get_quiz(quiz_id: str):
     """Get a specific quiz for taking (without correct answers)"""
     try:
-        quiz = await db.quizzes.find_one({"id": quiz_id, "is_active": True})
+        quiz = await db.quizzes.find_one({"id": quiz_id, "is_active": True}, {"_id": 0})
         
         if not quiz:
             raise HTTPException(status_code=404, detail="Quiz not found")

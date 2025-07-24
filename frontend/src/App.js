@@ -419,33 +419,54 @@ const Login = ({ onSwitchToRegister, onBackToLanding }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-600">Login to Quiz Platform</h2>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
+      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl">
+        {/* Back Button */}
+        <button
+          onClick={onBackToLanding}
+          className="flex items-center text-gray-600 hover:text-blue-600 mb-6 group"
+        >
+          <svg className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Back to Home
+        </button>
+
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+            Welcome Back
+          </h2>
+          <p className="text-gray-600">Sign in to your Quiz Platform account</p>
+        </div>
         
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center">
+            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+            </svg>
             {error}
           </div>
         )}
         
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
             <input
               type="email"
-              placeholder="Email"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your email"
+              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               value={formData.email}
               onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
               required
             />
           </div>
           
-          <div className="mb-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <input
               type="password"
-              placeholder="Password"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your password"
+              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               value={formData.password}
               onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
               required
@@ -455,20 +476,27 @@ const Login = ({ onSwitchToRegister, onBackToLanding }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-medium transition-colors disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 px-4 rounded-lg font-medium transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:transform-none shadow-lg"
           >
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                Signing In...
+              </div>
+            ) : (
+              'Sign In'
+            )}
           </button>
         </form>
         
-        <div className="text-center mt-4">
+        <div className="text-center mt-6 pt-6 border-t border-gray-200">
           <p className="text-gray-600">
             Don't have an account?{' '}
             <button
               onClick={onSwitchToRegister}
-              className="text-blue-500 hover:text-blue-600 font-medium"
+              className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
             >
-              Sign Up
+              Create Account
             </button>
           </p>
         </div>

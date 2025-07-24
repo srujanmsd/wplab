@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Mini Quiz Platform
-Tests all quiz management, attempt submission, and result retrieval endpoints
+Backend API Testing for Mini Quiz Platform with Authentication
+Tests authentication, quiz management, evaluation system, and result publishing
 """
 
 import requests
@@ -22,6 +22,10 @@ class QuizPlatformTester:
     def __init__(self):
         self.base_url = API_BASE_URL
         self.session = requests.Session()
+        self.admin_token = None
+        self.user_token = None
+        self.admin_user = None
+        self.regular_user = None
         self.created_quiz_id = None
         self.created_result_id = None
         

@@ -58,6 +58,202 @@ class QuizPlatformTester:
             self.log_test("Health Check", "FAIL", f"Exception: {str(e)}")
             return False
 
+    def test_user_registration(self) -> bool:
+        """Test POST /api/register - User registration"""
+        try:
+            # Register admin user
+            admin_data = {
+                "email": "admin@quizplatform.com",
+                "password": "AdminPass123!",
+                "full_name": "Quiz Administrator",
+                "role": "admin"
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/register",
+                json=admin_data,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                admin_user = response.json()
+                required_fields = ["id", "email", "full_name", "role", "is_active"]
+                
+                if all(field in admin_user for field in required_fields):
+                    if admin_user["role"] == "admin" and admin_user["email"] == admin_data["email"]:
+                        self.admin_user = admin_user
+                        
+                        # Register regular user
+                        user_data = {
+                            "email": "student@quizplatform.com",
+                            "password": "StudentPass123!",
+                            "full_name": "John Student",
+                            "role": "user"
+                        }
+                        
+                        user_response = self.session.post(
+                            f"{self.base_url}/register",
+                            json=user_data,
+                            headers={"Content-Type": "application/json"}
+                        )
+                        
+                        if user_response.status_code == 200:
+                            regular_user = user_response.json()
+                            if regular_user["role"] == "user":
+                                self.regular_user = regular_user
+                                self.log_test("User Registration", "PASS", "Both admin and user registered successfully")
+                                return True
+                            else:
+                                self.log_test("User Registration", "FAIL", "User role incorrect")
+                                return False
+                        else:
+                            self.log_test("User Registration", "FAIL", f"User registration failed: {user_response.status_code}")
+                            return False
+                    else:
+                        self.log_test("User Registration", "FAIL", "Admin user data incorrect")
+                        return False
+                else:
+                    self.log_test("User Registration", "FAIL", "Response missing required fields")
+                    return False
+            else:
+                self.log_test("User Registration", "FAIL", f"Status code: {response.status_code}, Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_test("User Registration", "FAIL", f"Exception: {str(e)}")
+            return False
+
+    def test_user_login(self) -> bool:
+        """Test POST /api/login - User login and JWT token generation"""
+        try:
+            # Login admin user
+            admin_login = {
+                "email": "admin@quizplatform.com",
+                "password": "AdminPass123!"
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/login",
+                json=admin_login,
+                headers={"Content-Type": "application/json"}
+            )
+            
+            if response.status_code == 200:
+                token_data = response.json()
+                required_fields = ["access_token", "token_type", "user"]
+                
+                if all(field in token_data for field in required_fields):
+                    if token_data["token_type"] == "bearer" and token_data["user"]["role"] == "admin":
+                        self.admin_token = token_data["access_token"]
+                        
+                        # Login regular user
+                        user_login = {
+                            "email": "student@quizplatform.com",
+                            "password": "StudentPass123!"
+                        }
+                        
+                        user_response = self.session.post(
+                            f"{self.base_url}/login",
+                            json=user_login,
+                            headers={"Content-Type": "application/json"}
+                        )
+                        
+                        if user_response.status_code == 200:
+                            user_token_data = user_response.json()
+                            if user_token_data["user"]["role"] == "user":
+                                self.user_token = user_token_data["access_token"]
+                                self.log_test("User Login", "PASS", "Both admin and user login successful with JWT tokens")
+                                return True
+                            else:
+                                self.log_test("User Login", "FAIL", "User login role incorrect")
+                                return False
+                        else:
+                            self.log_test("User Login", "FAIL", f"User login failed: {user_response.status_code}")
+                            return False
+                    else:
+                        self.log_test("User Login", "FAIL", "Admin login data incorrect")
+                        return False
+                else:
+                    self.log_test("User Login", "FAIL", "Response missing required fields")
+                    return False
+            else:
+                self.log_test("User Login", "FAIL", f"Status code: {response.status_code}, Response: {response.text}")
+                return False
+                
+        except Exception as e:
+            self.log_test("User Login", "FAIL", f"Exception: {str(e)}")
+            return False
+
+    def test_protected_profile_endpoint(self) -> bool:
+        """Test GET /api/me - Protected profile endpoint"""
+        try:
+            if not self.user_token:
+                self.log_test("Protected Profile Endpoint", "FAIL", "No user token available")
+                return False
+            
+            # Test with valid token
+            headers = {"Authorization": f"Bearer {self.user_token}"}
+            response = self.session.get(f"{self.base_url}/me", headers=headers)
+            
+            if response.status_code == 200:
+                user_data = response.json()
+                required_fields = ["id", "email", "full_name", "role"]
+                
+                if all(field in user_data for field in required_fields):
+                    if user_data["email"] == "student@quizplatform.com":
+                        # Test without token (should fail)
+                        no_auth_response = self.session.get(f"{self.base_url}/me")
+                        
+                        if no_auth_response.status_code == 401:
+                            self.log_test("Protected Profile Endpoint", "PASS", "Profile endpoint properly protected")
+                            return True
+                        else:
+                            self.log_test("Protected Profile Endpoint", "FAIL", "Endpoint not properly protected")
+                            return False
+                    else:
+                        self.log_test("Protected Profile Endpoint", "FAIL", "Wrong user data returned")
+                        return False
+                else:
+                    self.log_test("Protected Profile Endpoint", "FAIL", "Response missing required fields")
+                    return False
+            else:
+                self.log_test("Protected Profile Endpoint", "FAIL", f"Status code: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("Protected Profile Endpoint", "FAIL", f"Exception: {str(e)}")
+            return False
+
+    def test_role_based_access(self) -> bool:
+        """Test role-based access control"""
+        try:
+            if not self.user_token or not self.admin_token:
+                self.log_test("Role-based Access Control", "FAIL", "Missing tokens for testing")
+                return False
+            
+            # Test user trying to access admin endpoint (should fail)
+            user_headers = {"Authorization": f"Bearer {self.user_token}"}
+            response = self.session.get(f"{self.base_url}/admin/results", headers=user_headers)
+            
+            if response.status_code == 403:
+                # Test admin accessing admin endpoint (should succeed)
+                admin_headers = {"Authorization": f"Bearer {self.admin_token}"}
+                admin_response = self.session.get(f"{self.base_url}/admin/results", headers=admin_headers)
+                
+                if admin_response.status_code == 200:
+                    self.log_test("Role-based Access Control", "PASS", "Role-based access properly enforced")
+                    return True
+                else:
+                    self.log_test("Role-based Access Control", "FAIL", "Admin access failed")
+                    return False
+            else:
+                self.log_test("Role-based Access Control", "FAIL", "User access not properly restricted")
+                return False
+                
+        except Exception as e:
+            self.log_test("Role-based Access Control", "FAIL", f"Exception: {str(e)}")
+            return False
+
     def test_create_quiz(self) -> bool:
         """Test POST /api/quizzes - Create new quiz"""
         try:

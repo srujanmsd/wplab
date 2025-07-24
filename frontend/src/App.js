@@ -1244,10 +1244,16 @@ const MyResults = () => {
 // Main App Component
 function App() {
   const [authView, setAuthView] = useState('login');
+  const [showLanding, setShowLanding] = useState(true);
   
   return (
     <AuthProvider>
-      <AppContent authView={authView} setAuthView={setAuthView} />
+      <AppContent 
+        authView={authView} 
+        setAuthView={setAuthView}
+        showLanding={showLanding}
+        setShowLanding={setShowLanding}
+      />
     </AuthProvider>
   );
 }

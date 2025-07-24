@@ -506,7 +506,7 @@ const Login = ({ onSwitchToRegister, onBackToLanding }) => {
 };
 
 // Register Component
-const Register = ({ onSwitchToLogin }) => {
+const Register = ({ onSwitchToLogin, onBackToLanding }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',

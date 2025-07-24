@@ -107,15 +107,18 @@ user_problem_statement: "Mini Quiz/Test Platform - Enhanced with authentication 
 backend:
   - task: "Authentication system with JWT"
     implemented: true
-    working: "NA"
+    working: true
     file: "server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented complete JWT-based authentication with user registration, login, role-based access control (user/admin), and protected routes"
+      - working: true
+        agent: "main"
+        comment: "Fixed critical authentication bug where User model didn't include hashed_password field. Updated registration to properly store hashed passwords and login to handle authentication correctly. Cleared corrupted user data and verified registration/login works for both users and admins."
         
   - task: "Enhanced quiz system with text questions"
     implemented: true

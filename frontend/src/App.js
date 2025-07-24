@@ -937,10 +937,10 @@ const AdminEvaluation = () => {
   const submitEvaluation = async () => {
     if (!selectedResult) return;
 
-    const evaluationList = Object.values(evaluations).map(eval => ({
-      question_id: eval.question_id,
-      points_awarded: parseInt(eval.points_awarded) || 0,
-      feedback: eval.feedback || ''
+    const evaluationList = Object.values(evaluations).map(evaluation => ({
+      question_id: evaluation.question_id,
+      points_awarded: parseInt(evaluation.points_awarded) || 0,
+      feedback: evaluation.feedback || ''
     }));
 
     try {

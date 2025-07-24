@@ -1258,7 +1258,7 @@ function App() {
   );
 }
 
-const AppContent = ({ authView, setAuthView }) => {
+const AppContent = ({ authView, setAuthView, showLanding, setShowLanding }) => {
   const { isAuthenticated, isAdmin, loading, user, logout } = useAuth();
   const [currentView, setCurrentView] = useState('home');
   const [selectedQuizId, setSelectedQuizId] = useState(null);
@@ -1266,20 +1266,31 @@ const AppContent = ({ authView, setAuthView }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="loading mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading...</p>
         </div>
       </div>
     );
   }
 
+  // Show landing page if not authenticated and showLanding is true
+  if (!isAuthenticated && showLanding) {
+    return <LandingPage setShowLanding={setShowLanding} setAuthView={setAuthView} />;
+  }
+
   if (!isAuthenticated) {
     return authView === 'login' ? (
-      <Login onSwitchToRegister={() => setAuthView('register')} />
+      <Login 
+        onSwitchToRegister={() => setAuthView('register')} 
+        onBackToLanding={() => setShowLanding(true)}
+      />
     ) : (
-      <Register onSwitchToLogin={() => setAuthView('login')} />
+      <Register 
+        onSwitchToLogin={() => setAuthView('login')} 
+        onBackToLanding={() => setShowLanding(true)}
+      />
     );
   }
 

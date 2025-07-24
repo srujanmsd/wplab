@@ -224,6 +224,13 @@ async def login_user(user_credentials: UserLogin):
                 detail="Incorrect email or password"
             )
         
+        # Check if user has hashed_password field
+        if "hashed_password" not in user_data:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="User data corrupted. Please contact administrator."
+            )
+        
         # Verify password
         if not verify_password(user_credentials.password, user_data["hashed_password"]):
             raise HTTPException(
@@ -243,6 +250,8 @@ async def login_user(user_credentials: UserLogin):
         return Token(access_token=access_token, token_type="bearer", user=user)
     except HTTPException:
         raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error during login: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Login error: {str(e)}")
 

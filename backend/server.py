@@ -155,7 +155,7 @@ async def submit_quiz_attempt(quiz_id: str, attempt: QuizAttemptSubmission, stud
     """Submit quiz responses and get results"""
     try:
         # Get the quiz with correct answers
-        quiz = await db.quizzes.find_one({"id": quiz_id, "is_active": True})
+        quiz = await db.quizzes.find_one({"id": quiz_id, "is_active": True}, {"_id": 0})
         
         if not quiz:
             raise HTTPException(status_code=404, detail="Quiz not found")
